@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Ogge",
+        "repositoryURL": "https://github.com/phoqe/Ogge.git",
+        "state": {
+          "branch": "master",
+          "revision": "67d934e02efcb76f9e992eeaf080bab15c97e833",
+          "version": null
+        }
+      },
+      {
+        "package": "SwiftSoup",
+        "repositoryURL": "https://github.com/scinfu/SwiftSoup.git",
+        "state": {
+          "branch": null,
+          "revision": "02c63b7be50bda384f22c56c64d347231754a07e",
+          "version": "2.3.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
