@@ -2,7 +2,7 @@ import Foundation
 
 /// The repository for accessing Hacker News services.
 /// The structure follows a "more variables, easier to debug" structure, so variables are assigned a value which is then returned.
-struct HNRepo {
+public struct HNRepo {
     /// The URL to Hacker News.
     public static let hnURL = URL(string: "https://news.ycombinator.com")!
 
