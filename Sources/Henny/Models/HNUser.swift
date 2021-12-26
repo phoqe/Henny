@@ -2,7 +2,7 @@ import Foundation
 
 /// A model for a Hacker News user.
 /// Only users that have public activity on the site are available through the API.
-struct HNUser: Codable {
+public struct HNUser: Codable {
 
     // MARK: API
 
