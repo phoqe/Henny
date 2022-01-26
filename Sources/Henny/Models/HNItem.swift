@@ -3,12 +3,12 @@ import Ogge
 
 /// On Hacker News, items are everything.
 /// Stories, comments, polls, etc.
-public struct HNItem: Codable {
+public struct HNItem: Codable, Identifiable {
 
     // MARK: API
 
     /// The item's unique ID.
-    let id: Int
+    public let id: Int
 
     /// Whether the item is deleted.
     /// It can be deleted by administrators and anti-abuse software.
@@ -113,5 +113,39 @@ public struct HNItem: Codable {
 
             return try await OGRepo.object(from: url)
         }
+    }
+
+    init(
+        id: Int,
+        deleted: Bool?,
+        type: HNItemType?,
+        by: String?,
+        time: Date?,
+        text: String?,
+        dead: Bool?,
+        parent: Int?,
+        poll: Int?,
+        kids: [Int]?,
+        url: URL?,
+        score: Int?,
+        title: String?,
+        parts: [Int]?,
+        descendants: Int?
+    ) {
+        self.id = id
+        self.deleted = deleted
+        self.type = type
+        self.by = by
+        self.time = time
+        self.text = text
+        self.dead = dead
+        self.parent = parent
+        self.poll = poll
+        self.kids = kids
+        self.url = url
+        self.score = score
+        self.title = title
+        self.parts = parts
+        self.descendants = descendants
     }
 }
