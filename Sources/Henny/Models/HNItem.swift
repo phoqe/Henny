@@ -115,7 +115,7 @@ public struct HNItem: Codable, Identifiable {
         }
     }
 
-    init(
+    public init(
         id: Int,
         deleted: Bool?,
         type: HNItemType?,
