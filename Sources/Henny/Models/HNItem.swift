@@ -100,7 +100,7 @@ public struct HNItem: Codable, Identifiable {
 
     /// The URL to the item on Hacker News.
     public var hnURL: URL {
-        HNRepo.hnURL.appendingPathComponent("item?id=\(id)")
+        URL(string: "\(HNRepo.hnURL.absoluteString)/item?id=\(id)")!
     }
 
     /// The Open Graph metadata associated with the URL of the story.

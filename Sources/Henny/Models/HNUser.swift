@@ -50,6 +50,6 @@ public struct HNUser: Codable {
 
     /// The URL to the user on Hacker News.
     public var hnURL: URL {
-        HNRepo.hnURL.appendingPathComponent("user?id=\(id)")
+        URL(string: "\(HNRepo.hnURL.absoluteString)/user?id=\(id)")!
     }
 }
