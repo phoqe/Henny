@@ -56,64 +56,6 @@ public struct HNItem: Codable, Identifiable {
     /// The total comment count for stories and polls.
     public let descendants: Int?
 
-    private enum CodingKeys: String, CodingKey {
-        case id
-        case deleted
-        case type
-        case by
-        case time
-        case text
-        case dead
-        case parent
-        case poll
-        case kids
-        case url
-        case score
-        case title
-        case parts
-        case descendants
-    }
-
-    // MARK: Convenience
-
-    /// A convenience mirror of `by`.
-    public var author: String? {
-        by
-    }
-
-    /// Mirror of `time` for convenience.
-    public var created: Date? {
-        time
-    }
-
-    /// A mirror of `text`.
-    public var body: String? {
-        text
-    }
-
-    /// A mirror of `kids`. Simply, the IDs of the item's comments in a ranked display order.
-    /// See `kids` for more info.
-    public var comments: [Int]? {
-        kids
-    }
-
-    /// A mirror of `score` to adhere to more naming schemes.
-    public var karma: Int? {
-        score
-    }
-
-    /// Like `karma`, a mirror of `score`.
-    /// See `score` for more info.
-    public var upvotes: Int? {
-        score
-    }
-
-    /// A mirror of `descendants`.
-    /// See `descendants` for more info.
-    public var commentCount: Int? {
-        descendants
-    }
-
     // MARK: Custom
 
     /// The URL to the item on Hacker News.
