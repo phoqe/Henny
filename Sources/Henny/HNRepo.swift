@@ -22,8 +22,10 @@ public struct HNRepo {
     /// A shared `URLSession` for use with Hacker News.
     /// Should probably make this more customizable in the future.
     /// Right now, no caching. And users can't modify the session.
-    private static let session: URLSession = {
+    public static let session: URLSession = {
         let config = URLSessionConfiguration.default
+
+        config.requestCachePolicy = .returnCacheDataElseLoad
 
         return URLSession(configuration: config)
     }()
