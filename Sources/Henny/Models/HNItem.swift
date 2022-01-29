@@ -56,6 +56,24 @@ public struct HNItem: Codable, Identifiable {
     /// The total comment count for stories and polls.
     public let descendants: Int?
 
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case deleted
+        case type
+        case by
+        case time
+        case text
+        case dead
+        case parent
+        case poll
+        case kids
+        case url
+        case score
+        case title
+        case parts
+        case descendants
+    }
+
     // MARK: Convenience
 
     /// A convenience mirror of `by`.
