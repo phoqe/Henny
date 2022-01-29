@@ -115,11 +115,6 @@ public struct HNItem: Codable, Identifiable {
         }
     }
 
-    /// Returns the host name of the URL.
-    public var host: String? {
-        url?.host?.replacingOccurrences(of: "^www.", with: "", options: .regularExpression)
-    }
-
     public init(
         id: Int,
         deleted: Bool?,
