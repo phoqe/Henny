@@ -3,7 +3,7 @@ import Ogge
 
 /// On Hacker News, items are everything.
 /// Stories, comments, polls, etc.
-public struct HNItem: Codable, Identifiable {
+public struct HNItem: Codable {
 
     // MARK: API
 
