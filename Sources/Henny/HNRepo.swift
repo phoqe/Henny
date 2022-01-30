@@ -188,13 +188,6 @@ public struct HNRepo {
         return user
     }
 
-    // MARK: Auth
-
-//    public static func upvoteItem(id: Int) async throws {
-//        let url = hnURL
-//            .appendingPathComponent("vote?id=\(id)&how=up&auth=\(auth)")
-//    }
-
     // MARK: Misc
 
     /// Fetches the most recent item submitted on Hacker News.

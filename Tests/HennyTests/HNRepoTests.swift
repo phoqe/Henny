@@ -42,9 +42,6 @@ final class HNRepoTests: XCTestCase {
         let storyItems = try await HNRepo.storyItems(type: .ask, limit: 2000)
 
         print(storyItems)
-
-        // Not yet supported.
-        //XCTAssertThrowsError(try await HNRepo.storyItems(type: .ask, limit: 2000))
     }
 
     // MARK: User
@@ -54,12 +51,6 @@ final class HNRepoTests: XCTestCase {
 
         print(user)
     }
-
-    // MARK: Auth
-
-//    func testUpvoteItem() async throws {
-//        try await HNRepo.upvoteItem(id: 1)
-//    }
 
     // MARK: Misc
 
