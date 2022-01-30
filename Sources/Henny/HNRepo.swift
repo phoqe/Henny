@@ -174,13 +174,7 @@ public struct HNRepo {
             return [HNItem]()
         }
 
-        if (type == .top || type == .new) && limit > 500 {
-            throw HNRepoError.limitExceededForStoryType(storyType: type, maxLimit: 500)
-        }
-
-        if (type == .ask || type == .show || type == .job) && limit > 200 {
-            throw HNRepoError.limitExceededForStoryType(storyType: type, maxLimit: 200)
-        }
+        try validateLimit(storyType: type, limit: limit)
 
         var limitedStoryIdentifiers: [Int]
 
@@ -260,5 +254,17 @@ public struct HNRepo {
         let update = try decoder.decode(HNUpdate.self, from: data)
 
         return update
+    }
+}
+
+extension HNRepo {
+    private static func validateLimit(storyType: HNStoryType, limit: Int) throws {
+        if (storyType == .top || storyType == .new) && limit > 500 {
+            throw HNRepoError.limitExceededForStoryType(storyType: storyType, maxLimit: 500)
+        }
+
+        if (storyType == .ask || storyType == .show || storyType == .job) && limit > 200 {
+            throw HNRepoError.limitExceededForStoryType(storyType: storyType, maxLimit: 200)
+        }
     }
 }
