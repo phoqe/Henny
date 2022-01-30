@@ -32,6 +32,21 @@ final class HNRepoTests: XCTestCase {
         print(storyItems)
     }
 
+    func testStoryItemsLimit() async throws {
+        let storyItems = try await HNRepo.storyItems(type: .ask, limit: 25)
+
+        print(storyItems)
+    }
+
+    func testStoryItemsExceedLimit() async throws {
+        let storyItems = try await HNRepo.storyItems(type: .ask, limit: 2000)
+
+        print(storyItems)
+
+        // Not yet supported.
+        //XCTAssertThrowsError(try await HNRepo.storyItems(type: .ask, limit: 2000))
+    }
+
     // MARK: User
 
     func testUser() async throws {

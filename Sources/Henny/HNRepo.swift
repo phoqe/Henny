@@ -1,5 +1,21 @@
 import Foundation
 
+/// A general purpose error structure for use within `HNRepo`.
+enum HNRepoError: Error, LocalizedError {
+    case limitExceededForStoryType(storyType: HNStoryType, maxLimit: Int)
+
+    var errorDescription: String? {
+        switch self {
+        case .limitExceededForStoryType(let storyType, let maxLimit):
+            return String(
+                format: NSLocalizedString("Maximum limit for story type '%@' is %d.", comment: ""),
+                storyType.rawValue,
+                maxLimit
+            )
+        }
+    }
+}
+
 /// The repository for accessing Hacker News services.
 /// The structure follows a "more variables, easier to debug" structure, so variables are assigned a value which is then returned.
 public struct HNRepo {
@@ -132,9 +148,49 @@ public struct HNRepo {
     public static func storyItems(type: HNStoryType) async throws -> [HNItem] {
         let storyIdentifiers = try await storyIdentifiers(type: type)
 
-        // No need to check for empty since `items(ids:)` does that for us.
+        if storyIdentifiers.isEmpty {
+            return [HNItem]()
+        }
 
         return try await items(ids: storyIdentifiers)
+    }
+
+    /// Fetches the story items for a story type using a `limit` for when you want a subset of the stories.
+    /// If the amount of available stories is less than the `limit`, you'll get the amount of stories in store.
+    /// That is, up to 500 `top` and `new` stories are available and up to 200 of the latest Ask HN, Show HN, and job stories.
+    ///
+    /// - Parameters:
+    ///    - type: The type of stories to fetch. Different story types have different number of items available.
+    ///    - limit: The number of stories you want to fetch.
+    ///
+    /// - Throws: An error if fetching data from the URL fails or if the decoding fails.
+    ///
+    /// - Returns: A list of limited story items for the given story type.
+    ///
+    public static func storyItems(type: HNStoryType, limit: Int) async throws -> [HNItem] {
+        let storyIdentifiers = try await storyIdentifiers(type: type)
+
+        if storyIdentifiers.isEmpty {
+            return [HNItem]()
+        }
+
+        if (type == .top || type == .new) && limit > 500 {
+            throw HNRepoError.limitExceededForStoryType(storyType: type, maxLimit: 500)
+        }
+
+        if (type == .ask || type == .show || type == .job) && limit > 200 {
+            throw HNRepoError.limitExceededForStoryType(storyType: type, maxLimit: 200)
+        }
+
+        var limitedStoryIdentifiers: [Int]
+
+        if storyIdentifiers.count <= limit {
+            limitedStoryIdentifiers = storyIdentifiers
+        } else {
+            limitedStoryIdentifiers = Array(storyIdentifiers.prefix(limit))
+        }
+
+        return try await items(ids: limitedStoryIdentifiers)
     }
 
     // MARK: User
