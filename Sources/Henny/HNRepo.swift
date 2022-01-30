@@ -1,21 +1,5 @@
 import Foundation
 
-/// A general purpose error structure for use within `HNRepo`.
-enum HNRepoError: Error, LocalizedError {
-    case limitExceededForStoryType(storyType: HNStoryType, maxLimit: Int)
-
-    var errorDescription: String? {
-        switch self {
-        case .limitExceededForStoryType(let storyType, let maxLimit):
-            return String(
-                format: NSLocalizedString("Maximum limit for story type '%@' is %d.", comment: ""),
-                storyType.rawValue,
-                maxLimit
-            )
-        }
-    }
-}
-
 /// The repository for accessing Hacker News services.
 /// The structure follows a "more variables, easier to debug" structure, so variables are assigned a value which is then returned.
 public struct HNRepo {
@@ -176,13 +160,7 @@ public struct HNRepo {
 
         try validateLimit(storyType: type, limit: limit)
 
-        var limitedStoryIdentifiers: [Int]
-
-        if storyIdentifiers.count <= limit {
-            limitedStoryIdentifiers = storyIdentifiers
-        } else {
-            limitedStoryIdentifiers = Array(storyIdentifiers.prefix(limit))
-        }
+        let limitedStoryIdentifiers = limitedStoryIdentifiers(storyIdentifiers: storyIdentifiers, limit: limit)
 
         return try await items(ids: limitedStoryIdentifiers)
     }
@@ -257,7 +235,8 @@ public struct HNRepo {
     }
 }
 
-extension HNRepo {
+private extension HNRepo {
+    /// Checks whether the limit is within bounds for the given story type.
     private static func validateLimit(storyType: HNStoryType, limit: Int) throws {
         if (storyType == .top || storyType == .new) && limit > 500 {
             throw HNRepoError.limitExceededForStoryType(storyType: storyType, maxLimit: 500)
@@ -265,6 +244,31 @@ extension HNRepo {
 
         if (storyType == .ask || storyType == .show || storyType == .job) && limit > 200 {
             throw HNRepoError.limitExceededForStoryType(storyType: storyType, maxLimit: 200)
+        }
+    }
+
+    /// Gets the story identifiers that is within bounds of the limit and avoiding index out of bounds exceptions.
+    private static func limitedStoryIdentifiers(storyIdentifiers: [Int], limit: Int) -> [Int] {
+        if storyIdentifiers.count <= limit {
+            return storyIdentifiers
+        }
+
+        return Array(storyIdentifiers.prefix(limit))
+    }
+}
+
+/// A general purpose error structure for use within `HNRepo`.
+private enum HNRepoError: Error, LocalizedError {
+    case limitExceededForStoryType(storyType: HNStoryType, maxLimit: Int)
+
+    var errorDescription: String? {
+        switch self {
+        case .limitExceededForStoryType(let storyType, let maxLimit):
+            return String(
+                format: NSLocalizedString("Maximum limit for story type '%@' is %d.", comment: ""),
+                storyType.rawValue,
+                maxLimit
+            )
         }
     }
 }
