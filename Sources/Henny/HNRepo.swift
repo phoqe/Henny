@@ -107,14 +107,14 @@ public struct HNRepo {
     ///
     /// - Returns: A list of story identifiers for the given story type.
     ///
-    public static func storyIdentifiers(type: HNStoryType) async throws -> [Int] {
+    public static func storyIds(type: HNStoryType) async throws -> [Int] {
         let url = apiURL
             .appendingPathComponent("\(type.rawValue)stories")
             .appendingPathExtension("json")
         let (data, _) = try await session.data(from: url)
-        let storyIdentifiers = try decoder.decode([Int].self, from: data)
+        let storyIds = try decoder.decode([Int].self, from: data)
 
-        return storyIdentifiers
+        return storyIds
     }
 
     /// Fetches the story items for a story type.
@@ -129,13 +129,13 @@ public struct HNRepo {
     /// - Returns: A list of story items for the given story type.
     ///
     public static func storyItems(type: HNStoryType) async throws -> [HNItem] {
-        let storyIdentifiers = try await storyIdentifiers(type: type)
+        let storyIds = try await storyIds(type: type)
 
-        if storyIdentifiers.isEmpty {
+        if storyIds.isEmpty {
             return [HNItem]()
         }
 
-        return try await items(ids: storyIdentifiers)
+        return try await items(ids: storyIds)
     }
 
     /// Fetches the story items for a story type using a `limit` for when you want a subset of the stories.
@@ -151,17 +151,17 @@ public struct HNRepo {
     /// - Returns: A list of limited story items for the given story type.
     ///
     public static func storyItems(type: HNStoryType, limit: Int) async throws -> [HNItem] {
-        let storyIdentifiers = try await storyIdentifiers(type: type)
+        let storyIds = try await storyIds(type: type)
 
-        if storyIdentifiers.isEmpty {
+        if storyIds.isEmpty {
             return [HNItem]()
         }
 
         try validateLimit(storyType: type, limit: limit)
 
-        let limitedStoryIdentifiers = limitedStoryIdentifiers(storyIdentifiers: storyIdentifiers, limit: limit)
+        let limitedStoryIds = limitedStoryIds(storyIds: storyIds, limit: limit)
 
-        return try await items(ids: limitedStoryIdentifiers)
+        return try await items(ids: limitedStoryIds)
     }
 
     // MARK: User
@@ -247,12 +247,12 @@ private extension HNRepo {
     }
 
     /// Gets the story identifiers that is within bounds of the limit and avoiding index out of bounds exceptions.
-    private static func limitedStoryIdentifiers(storyIdentifiers: [Int], limit: Int) -> [Int] {
-        if storyIdentifiers.count <= limit {
-            return storyIdentifiers
+    private static func limitedStoryIds(storyIds: [Int], limit: Int) -> [Int] {
+        if storyIds.count <= limit {
+            return storyIds
         }
 
-        return Array(storyIdentifiers.prefix(limit))
+        return Array(storyIds.prefix(limit))
     }
 }
 

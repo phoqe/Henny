@@ -20,10 +20,10 @@ final class HNRepoTests: XCTestCase {
 
     // MARK: Story
 
-    func testStoryIdentifiers() async throws {
-        let storyIdentifiers = try await HNRepo.storyIdentifiers(type: .top)
+    func testStoryIds() async throws {
+        let storyIds = try await HNRepo.storyIds(type: .top)
 
-        print(storyIdentifiers)
+        print(storyIds)
     }
 
     func testStoryItems() async throws {
