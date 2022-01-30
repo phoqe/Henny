@@ -57,9 +57,9 @@ final class HNRepoTests: XCTestCase {
 
     // MARK: Auth
 
-    func testUpvoteItem() async throws {
-        try await HNRepo.upvoteItem(id: 1)
-    }
+//    func testUpvoteItem() async throws {
+//        try await HNRepo.upvoteItem(id: 1)
+//    }
 
     // MARK: Misc
 

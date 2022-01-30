@@ -30,8 +30,6 @@ public struct HNRepo {
         return URLSession(configuration: config)
     }()
 
-    private static let auth: String = "f7eabafedff18df32842e2048e5b558ed61b519c"
-
     // MARK: Item
 
     /// Fetches a Hacker News item identified by its `id`.
@@ -191,10 +189,10 @@ public struct HNRepo {
 
     // MARK: Auth
 
-    public static func upvoteItem(id: Int) async throws {
-        let url = hnURL
-            .appendingPathComponent("vote?id=\(id)&how=up&auth=\(auth)")
-    }
+//    public static func upvoteItem(id: Int) async throws {
+//        let url = hnURL
+//            .appendingPathComponent("vote?id=\(id)&how=up&auth=\(auth)")
+//    }
 
     // MARK: Misc
 
