@@ -3,66 +3,103 @@ import XCTest
 @testable import Henny
 
 final class HNRepoTests: XCTestCase {
-
+    
     // MARK: Item
 
-    func testItem() async throws {
-        let item = try await HNRepo.item(id: 1)
-
-        print(item)
+    let validItemIds = [1, 1232, 272, 484, 457]
+    let invalidItemIds = [-1231231231, 12312321123312, -12122112, 1212312312, 213123123123, 21312123123321]
+    
+    func testItemWithValidIds() async throws {
+        for id in validItemIds {
+            let _ = try await HNRepo.item(id: id)
+        }
     }
-
-    func testItems() async throws {
-        let items = try await HNRepo.items(ids: [1, 2])
-
-        print(items)
+    
+    // should fail
+    func testItemWithInvalidIds() async throws {
+        for id in invalidItemIds {
+            let _ = try await HNRepo.item(id: id)
+        }
+    }
+    
+    // MARK: Items
+    
+    func testItemsWithValidIds() async throws {
+        let _ = try await HNRepo.items(ids: validItemIds)
+    }
+    
+    // should fail
+    func testItemsWithInvalidIds() async throws {
+        let _ = try await HNRepo.items(ids: invalidItemIds)
+    }
+    
+    func testItemsWithNoIds() async throws {
+        let _ = try await HNRepo.items(ids: [])
     }
 
     // MARK: Story
+    
+    let storyTypes = HNStoryType.allCases
 
-    func testStoryIds() async throws {
-        let storyIds = try await HNRepo.storyIds(type: .top)
-
-        print(storyIds)
+    func testStoryIdsWithAllStoryTypes() async throws {
+        for storyType in storyTypes {
+            let _ = try await HNRepo.storyIds(type: storyType)
+        }
     }
 
-    func testStoryItems() async throws {
-        let storyItems = try await HNRepo.storyItems(type: .top)
-
-        print(storyItems)
+    func testStoryItemsWithAllStoryTypes() async throws {
+        for storyType in storyTypes {
+            let _ = try await HNRepo.storyItems(type: storyType)
+        }
     }
+    
+    let validLimits = [10, 25, 50, 100, 150, 199]
 
-    func testStoryItemsLimit() async throws {
-        let storyItems = try await HNRepo.storyItems(type: .ask, limit: 25)
-
-        print(storyItems)
+    func testStoryItemsLimitWithAllStoryTypesAndValidLimits() async throws {
+        for storyType in storyTypes {
+            for limit in validLimits {
+                let _ = try await HNRepo.storyItems(type: storyType, limit: limit)
+            }
+        }
     }
-
-    func testStoryItemsExceedLimit() async throws {
-        let storyItems = try await HNRepo.storyItems(type: .ask, limit: 2000)
-
-        print(storyItems)
+    
+    let invalidLimits = [200, 400, 300, 500, 900, 1000]
+    
+    // should fail
+    func testStoryItemsLimitWithAllStoryTypesAndInvalidLimits() async throws {
+        for storyType in storyTypes {
+            for limit in invalidLimits {
+                let _ = try await HNRepo.storyItems(type: storyType, limit: limit)
+            }
+        }
     }
 
     // MARK: User
+    
+    let validUsers = ["dang", "Phoqe", "0xPersona", "pseudolus", "mikece"]
 
-    func testUser() async throws {
-        let user = try await HNRepo.user(id: "dang")
-
-        print(user)
+    func testUserValidUsers() async throws {
+        for user in validUsers {
+            let _ = try await HNRepo.user(id: user)
+        }
+    }
+    
+    let invalidUsers = ["u912d9j812j9d21", "9k21d9kd", "102i09d1kd921k90d", "91912d8j9d12j891d2j89", "89jd12d81"]
+    
+    // should fail
+    func testUserInvalidUsers() async throws {
+        for user in invalidUsers {
+            let _ = try await HNRepo.user(id: user)
+        }
     }
 
     // MARK: Misc
 
     func testMaxItem() async throws {
-        let maxItem = try await HNRepo.maxItem()
-
-        print(maxItem)
+        let _ = try await HNRepo.maxItem()
     }
 
     func testUpdates() async throws {
-        let updates = try await HNRepo.updates()
-
-        print(updates)
+        let _ = try await HNRepo.updates()
     }
 }
