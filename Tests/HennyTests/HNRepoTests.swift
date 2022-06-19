@@ -63,13 +63,25 @@ final class HNRepoTests: XCTestCase {
         }
     }
     
-    let invalidLimits = [200, 400, 300, 500, 900, 1000]
+    let invalidLimits = [-1, -12002912, 200, 400, 300, 500, 900, 1000]
     
     // should fail
     func testStoryItemsLimitWithAllStoryTypesAndInvalidLimits() async throws {
         for storyType in storyTypes {
             for limit in invalidLimits {
                 let _ = try await HNRepo.storyItems(type: storyType, limit: limit)
+            }
+        }
+    }
+    
+    let validOffsets = [10, 25, 50, 12, 23, 48]
+    
+    func testStoryItemsLimitWithAllStoryTypesAndValidLimitsAndValidOffsets() async throws {
+        for storyType in storyTypes {
+            for limit in validLimits {
+                for offset in validOffsets {
+                    let _ = try await HNRepo.storyItems(type: storyType, limit: limit, offset: offset)
+                }
             }
         }
     }

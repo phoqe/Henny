@@ -163,6 +163,20 @@ public struct HNRepo {
 
         return try await items(ids: limitedStoryIds)
     }
+    
+    public static func storyItems(type: HNStoryType, limit: Int, offset: Int) async throws -> [HNItem] {
+        let storyIds = try await storyIds(type: type)
+
+        if storyIds.isEmpty {
+            return [HNItem]()
+        }
+
+        try validateLimit(storyType: type, limit: limit)
+
+        let limitedStoryIds = limitedStoryIds(storyIds: storyIds, limit: limit, offset: offset)
+
+        return try await items(ids: limitedStoryIds)
+    }
 
     // MARK: User
 
@@ -246,6 +260,17 @@ private extension HNRepo {
         }
 
         return Array(storyIds.prefix(limit))
+    }
+    
+    private static func limitedStoryIds(storyIds: [Int], limit: Int, offset: Int) -> [Int] {
+        let startIndex = offset
+        let endIndex = (limit + offset) - 1
+        
+        if storyIds.count <= limit || storyIds.count <= endIndex {
+            return storyIds
+        }
+        
+        return Array(storyIds[startIndex...endIndex])
     }
 }
 
