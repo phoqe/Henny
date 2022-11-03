@@ -173,7 +173,7 @@ public struct HNRepo {
 
         try validateLimit(storyType: type, limit: limit)
 
-        let limitedStoryIds = limitedStoryIds(storyIds: storyIds, offset: offset, limit: limit)
+        let limitedStoryIds = limitedStoryIds(storyIds: storyIds, limit: limit, offset: offset)
 
         return try await items(ids: limitedStoryIds)
     }
@@ -262,12 +262,15 @@ private extension HNRepo {
         return Array(storyIds.prefix(limit))
     }
     
-    private static func limitedStoryIds(storyIds: [Int], offset: Int, limit: Int) -> [Int] {
-        if storyIds.count <= limit {
+    private static func limitedStoryIds(storyIds: [Int], limit: Int, offset: Int) -> [Int] {
+        let startIndex = offset
+        let endIndex = (limit + offset) - 1
+        
+        if storyIds.count <= limit || storyIds.count <= endIndex {
             return storyIds
         }
-
-        return Array(storyIds[offset..<offset+limit])
+        
+        return Array(storyIds[startIndex...endIndex])
     }
 }
 
