@@ -28,4 +28,12 @@ public struct HNUser: Codable {
     public var hnURL: URL {
         URL(string: "\(HNRepo.hnURL.absoluteString)/user?id=\(id)")!
     }
+    
+    init(id: String, created: Date, karma: Int, about: String?, submitted: [Int]?) {
+        self.id = id
+        self.created = created
+        self.karma = karma
+        self.about = about
+        self.submitted = submitted
+    }
 }
